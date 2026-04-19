@@ -180,6 +180,10 @@
       border-color: transparent;
     }
 
+    .recipes-header {
+      margin-top: 10px;
+    }
+
     .search-panel {
       overflow: hidden;
       max-height: 0;
@@ -970,13 +974,6 @@
 
     <main class="content">
       <section id="listSection">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Todas las recetas</h2>
-            <p id="sectionMeta" class="section-meta">Cargando...</p>
-          </div>
-        </div>
-
         <div id="categoryChips" class="chips hidden"></div>
 
         <section id="featuredSection" class="featured-section hidden">
@@ -989,6 +986,13 @@
 
           <div id="featuredTrack" class="featured-track"></div>
         </section>
+
+        <div class="section-header recipes-header">
+          <div>
+            <h2 class="section-title">Todas las recetas</h2>
+            <p id="sectionMeta" class="section-meta">Cargando...</p>
+          </div>
+        </div>
 
         <div id="loading" class="state">Cargando recetas...</div>
         <div id="error" class="state hidden">No se pudieron cargar las recetas.</div>
