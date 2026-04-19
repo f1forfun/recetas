@@ -7,18 +7,18 @@
 
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
-  <meta name="theme-color" content="#8E6A5A">
+  <meta name="theme-color" content="#8e6a5a">
 
   <style>
     :root {
       --bg: #f5f1ec;
-      --bg-soft: #fbf8f5;
-      --surface: rgba(255,255,255,0.86);
+      --bg-soft: #fcfaf8;
+      --surface: rgba(255,255,255,0.92);
       --surface-strong: #ffffff;
-      --text: #201b18;
-      --muted: #746960;
+      --text: #221d1a;
+      --muted: #786d65;
       --accent: #8e6a5a;
-      --accent-2: #b78663;
+      --accent-2: #b78766;
       --accent-soft: #efe3da;
       --border: rgba(68, 47, 35, 0.08);
       --shadow-soft: 0 10px 30px rgba(48, 32, 24, 0.08);
@@ -41,11 +41,11 @@
 
     body {
       margin: 0;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background:
-        radial-gradient(circle at top, #fcfaf8 0%, var(--bg) 40%, #efe7e0 100%);
       min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, var(--bg-soft) 0%, var(--bg) 42%, #efe7e0 100%);
     }
 
     img {
@@ -54,31 +54,32 @@
     }
 
     button,
-    input {
+    input,
+    a {
       font: inherit;
     }
 
     .app-shell {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding-bottom: 32px;
+      padding-bottom: 34px;
     }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 40;
       padding: 14px 14px 12px;
-      background: linear-gradient(to bottom, rgba(245,241,236,0.94), rgba(245,241,236,0.82));
+      background: linear-gradient(to bottom, rgba(245,241,236,0.96), rgba(245,241,236,0.84));
       backdrop-filter: blur(14px);
     }
 
     .topbar-inner {
-      border: 1px solid rgba(255,255,255,0.65);
-      background: rgba(255,255,255,0.58);
-      box-shadow: var(--shadow-soft);
-      border-radius: 30px;
       padding: 16px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: var(--shadow-soft);
     }
 
     .brand-row {
@@ -86,7 +87,6 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 0;
     }
 
     .brand-left {
@@ -137,7 +137,7 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: var(--shadow-soft);
-      transition: transform var(--ease), background var(--ease), box-shadow var(--ease);
+      transition: transform var(--ease), background var(--ease), color var(--ease);
       flex-shrink: 0;
     }
 
@@ -156,13 +156,13 @@
       max-height: 0;
       opacity: 0;
       transform: translateY(-6px);
+      margin-top: 0;
+      pointer-events: none;
       transition:
-        max-height 300ms cubic-bezier(.2,.8,.2,1),
+        max-height 320ms cubic-bezier(.2,.8,.2,1),
         opacity 220ms ease,
         transform 220ms ease,
         margin-top 220ms ease;
-      margin-top: 0;
-      pointer-events: none;
     }
 
     .search-panel.open {
@@ -180,13 +180,13 @@
     .search-input {
       width: 100%;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.96);
       color: var(--text);
       border-radius: 18px;
-      padding: 14px 50px 14px 44px;
+      padding: 14px 48px 14px 44px;
       outline: none;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-soft);
-      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+      transition: border-color var(--ease), box-shadow var(--ease);
     }
 
     .search-input:focus {
@@ -249,8 +249,8 @@
       display: flex;
       gap: 10px;
       overflow-x: auto;
-      margin-bottom: 16px;
       padding: 2px 2px 8px;
+      margin-bottom: 16px;
       scrollbar-width: none;
     }
 
@@ -286,14 +286,12 @@
     }
 
     .card {
-      position: relative;
       overflow: hidden;
       border-radius: var(--radius-xl);
       background: var(--surface-strong);
       box-shadow: var(--shadow-card);
       cursor: pointer;
-      transform: translateY(0);
-      transition: transform var(--ease), box-shadow var(--ease), opacity var(--ease);
+      transition: transform var(--ease), box-shadow var(--ease);
       animation: cardIn 420ms cubic-bezier(.2,.8,.2,1);
     }
 
@@ -303,15 +301,14 @@
 
     .card-image-wrap {
       position: relative;
-      background: linear-gradient(180deg, #eadfd6, #e2d3c8);
       overflow: hidden;
+      background: linear-gradient(180deg, #eadfd6, #e2d3c8);
     }
 
     .card img {
       width: 100%;
       height: 240px;
       object-fit: cover;
-      transform: scale(1.001);
       transition: transform 500ms ease;
     }
 
@@ -325,7 +322,7 @@
       left: 14px;
       padding: 9px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
       color: var(--accent);
       font-size: 12px;
       font-weight: 800;
@@ -374,10 +371,6 @@
       font-weight: 700;
     }
 
-    .hidden {
-      display: none !important;
-    }
-
     .state {
       padding: 32px 18px;
       text-align: center;
@@ -385,6 +378,10 @@
       background: rgba(255,255,255,0.55);
       border-radius: 22px;
       box-shadow: var(--shadow-soft);
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     .detail-view {
@@ -404,11 +401,7 @@
       box-shadow: var(--shadow-soft);
       margin: 6px 0 16px;
       cursor: pointer;
-      transition: transform var(--ease), box-shadow var(--ease);
-    }
-
-    .detail-back:active {
-      transform: scale(.98);
+      text-decoration: none;
     }
 
     .hero-card {
@@ -450,6 +443,21 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+    }
+
+    .video-button {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: var(--shadow-soft);
     }
 
     .detail-grid {
@@ -575,7 +583,6 @@
     let recetas = [];
     let recetasFiltradas = [];
     let categoriaActiva = "";
-    let recetaActualId = null;
     let busquedaAbierta = false;
 
     const loadingEl = document.getElementById("loading");
@@ -631,11 +638,8 @@
     }
 
     function toggleBuscador() {
-      if (busquedaAbierta) {
-        cerrarBuscador(false);
-      } else {
-        abrirBuscador();
-      }
+      if (busquedaAbierta) cerrarBuscador(false);
+      else abrirBuscador();
     }
 
     function normalizarTexto(texto) {
@@ -767,8 +771,6 @@
     }
 
     function abrirReceta(receta, pushState = true) {
-      recetaActualId = receta.id;
-
       const ingredientes = convertirTextoEnLista(receta.ingredientes);
       const pasos = convertirTextoEnLista(receta.pasos);
 
@@ -784,6 +786,7 @@
               ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
               ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(formatearFecha(receta.fecha))}</span>` : ""}
             </div>
+            ${receta.link ? `<a class="video-button" href="${escapeHtml(receta.link)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo</a>` : ""}
           </div>
         </article>
 
@@ -822,7 +825,6 @@
     }
 
     function volverALista(fromPopState = false) {
-      recetaActualId = null;
       detailView.classList.add("hidden");
       listSection.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -869,11 +871,8 @@
     searchToggle.addEventListener("click", toggleBuscador);
 
     searchClose.addEventListener("click", () => {
-      if (searchInput.value.trim()) {
-        cerrarBuscador(true);
-      } else {
-        cerrarBuscador(false);
-      }
+      if (searchInput.value.trim()) cerrarBuscador(true);
+      else cerrarBuscador(false);
     });
 
     searchInput.addEventListener("input", aplicarFiltros);
