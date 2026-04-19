@@ -102,13 +102,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: calc(12px - (4px * var(--header-progress)));
     }
 
     .brand-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: calc(12px - (4px * var(--header-progress)));
       min-width: 0;
       flex: 1;
     }
@@ -1541,8 +1541,8 @@
 
     function updateHeaderTarget() {
       const y = window.scrollY;
-      const start = 20;   // empieza a comprimirse
-      const end = 120;    // totalmente comprimido
+      const start = 10;   // empieza a comprimirse
+      const end = 90;    // totalmente comprimido
 
       const raw = (y - start) / (end - start);
       targetProgress = Math.max(0, Math.min(1, raw));
@@ -1557,7 +1557,7 @@
       const diff = targetProgress - currentProgress;
 
       // suavizado
-      currentProgress += diff * 0.14;
+      currentProgress += diff * 0.22;
 
       if (Math.abs(diff) < 0.001) {
         currentProgress = targetProgress;
