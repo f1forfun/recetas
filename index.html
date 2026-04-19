@@ -473,26 +473,28 @@
     }
 
     .video-button {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      margin-top: 14px;
 
-      padding: 14px 16px;
-      border-radius: 18px;
+      margin-top: 12px;
+
+      padding: 10px 14px;
+      border-radius: 999px;
 
       background: linear-gradient(
         135deg,
-        rgba(142,106,90,0.18),
-        rgba(183,135,102,0.18)
+        var(--accent),
+        var(--accent-2)
       );
-      color: var(--accent);
 
+      color: #fff;
       font-weight: 700;
+      font-size: 13px;
+
       text-decoration: none;
 
-      border: 1px solid rgba(142,106,90,0.25);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 
       transition: all var(--ease);
     }
@@ -520,8 +522,8 @@
     }
 
     .video-button:active {
-      transform: scale(.98);
-      background: rgba(142,106,90,0.22);
+      transform: scale(0.96);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
     .primary-button:active,
     .secondary-button:active {
@@ -1189,7 +1191,7 @@
               ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
               ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(formatearFecha(receta.fecha))}</span>` : ""}
             </div>
-            ${receta.link ? `<a class="video-button" href="${escapeHtml(receta.link)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo</a>` : ""}
+            ${receta.link ? `<a class="video-button" href="${escapeHtml(receta.link)}" target="_blank" rel="noopener noreferrer">🎬 Ver vídeo</a>` : ""}
           </div>
         </article>
 
