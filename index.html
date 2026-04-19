@@ -1292,10 +1292,13 @@
         </div>
       `;
 
-      document.getElementById("backButton").addEventListener("click", volverALista);
+      document.getElementById("backButton").addEventListener("click", () => {
+        history.back();
+      });
 
       ocultarTodo();
       detailView.classList.remove("hidden");
+      cerrarDrawer();
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (pushState) {
@@ -1309,6 +1312,9 @@
       ocultarTodo();
       adminView.classList.remove("hidden");
       prepararEstadoAdmin();
+      cerrarDrawer();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (pushState) {
         const url = new URL(window.location.href);
@@ -1335,23 +1341,43 @@
     function volverALista(fromPopState = false) {
       ocultarTodo();
       listSection.classList.remove("hidden");
+      cerrarDrawer();
+
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (!fromPopState) {
-        if (window.location.hash.startsWith("#receta=") || window.location.hash === "#admin") {
-          history.back();
-        } else {
-          const url = new URL(window.location.href);
-          url.hash = "";
-          history.replaceState({ view: "list" }, "", url.pathname + url.search);
-        }
+        const cleanUrl = window.location.pathname + window.location.search;
+        history.replaceState({ view: "list" }, "", cleanUrl);
       }
+    }
+
+    function irArriba() {
+      window.scrollTo({
+        top: 0,
+        behavior: "instant"
+      });
     }
 
     function ocultarTodo() {
       listSection.classList.add("hidden");
       detailView.classList.add("hidden");
       adminView.classList.add("hidden");
+    }
+
+    function mostrarInicio(pushState = false) {
+      ocultarTodo();
+      listSection.classList.remove("hidden");
+      cerrarDrawer();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const cleanUrl = window.location.pathname + window.location.search;
+
+      if (pushState) {
+        history.pushState({ view: "list" }, "", cleanUrl);
+      } else {
+        history.replaceState({ view: "list" }, "", cleanUrl);
+      }
     }
 
     function restaurarEstadoDesdeURL() {
@@ -1374,8 +1400,7 @@
         }
       }
 
-      history.replaceState({ view: "list" }, "", window.location.pathname + window.location.search);
-      volverALista(true);
+      mostrarInicio(false);
     }
 
     window.addEventListener("popstate", (event) => {
@@ -1393,8 +1418,13 @@
 
       if (state.view === "detail" && state.recetaId) {
         const receta = recetas.find(r => r.id === state.recetaId);
-        if (receta) abrirReceta(receta, false);
+        if (receta) {
+          abrirReceta(receta, false);
+          return;
+        }
       }
+
+      volverALista(true);
     });
 
     function setAdminToken(token) {
@@ -1565,8 +1595,7 @@
     drawerOverlay.addEventListener("click", cerrarDrawer);
 
     document.getElementById("menuHome").addEventListener("click", () => {
-      cerrarDrawer();
-      volverALista(false);
+      mostrarInicio(true);
     });
 
     document.getElementById("menuAdmin").addEventListener("click", () => {
@@ -1575,8 +1604,13 @@
     });
 
     adminLoginButton.addEventListener("click", loginAdmin);
-    adminBackButton1.addEventListener("click", () => volverALista(false));
-    adminBackButton2.addEventListener("click", () => volverALista(false));
+    adminBackButton1.addEventListener("click", () => {
+      history.back();
+    });
+
+    adminBackButton2.addEventListener("click", () => {
+      history.back();
+    });
     logoutAdminButton.addEventListener("click", logoutAdmin);
     saveRecipeButton.addEventListener("click", guardarReceta);
 
