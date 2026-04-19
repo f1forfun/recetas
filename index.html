@@ -91,13 +91,14 @@
       box-shadow:
         var(--shadow-soft),
         0 10px 24px rgba(48, 32, 24, 0.05);
-      transition: all var(--ease);
+      transition: padding var(--ease), box-shadow var(--ease), background var(--ease);
     }
     
     .topbar.compact .brand-subtitle {
       opacity: 0;
       max-height: 0;
       margin-top: 0;
+      transform: translateY(-4px);
       overflow: hidden;
     }
 
@@ -138,7 +139,7 @@
       border: 1px solid var(--border);
       box-shadow: 0 8px 18px rgba(0,0,0,0.08);
       flex-shrink: 0;
-      transition: all var(--ease);
+      transition: width var(--ease), height var(--ease), border-radius var(--ease);
     }
 
     .brand-copy {
@@ -151,7 +152,7 @@
       line-height: 1.05;
       font-weight: 800;
       letter-spacing: -0.03em;
-      transition: all var(--ease);
+      transition: font-size var(--ease), line-height var(--ease);
     }
 
     .brand-subtitle {
@@ -161,7 +162,12 @@
       max-height: 30px;
       overflow: hidden;
       opacity: 1;
-      transition: all var(--ease);
+      transform: translateY(0);
+      transition:
+        opacity 180ms ease,
+        max-height 220ms ease,
+        margin-top 220ms ease,
+        transform 180ms ease;
     }
 
     .topbar-actions {
@@ -1547,15 +1553,22 @@
     }
 
     cargarRecetas();
+    
     const topbar = document.querySelector(".topbar");
+    let isCompact = false;
 
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 60) {
+      const y = window.scrollY;
+
+      if (!isCompact && y > 90) {
         topbar.classList.add("compact");
-      } else {
+        isCompact = true;
+      } else if (isCompact && y < 50) {
         topbar.classList.remove("compact");
+        isCompact = false;
       }
     });
+    
   </script>
 </body>
 </html>
