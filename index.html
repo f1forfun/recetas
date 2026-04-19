@@ -373,6 +373,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-top: 16px;
+      margin-bottom: 6px;
     }
 
     .pill {
@@ -470,7 +472,9 @@
       transition: transform var(--ease), opacity var(--ease), box-shadow var(--ease);
     }
 
-    .video-button,
+    .video-button {
+      margin-top: 14px;
+    }
     .primary-button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #fff;
@@ -482,6 +486,16 @@
       color: var(--text);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-soft);
+    }
+
+    .logout-button {
+      background: rgba(177,79,69,0.12);
+      color: var(--danger);
+      border: 1px solid rgba(177,79,69,0.22);
+    }
+
+    .logout-button:hover {
+      background: rgba(177,79,69,0.18);
     }
 
     .video-button:active,
@@ -862,7 +876,7 @@
 
             <div class="admin-actions">
               <button id="saveRecipeButton" class="primary-button">Guardar receta</button>
-              <button id="logoutAdminButton" class="secondary-button">Cerrar sesión</button>
+              <button id="logoutAdminButton" class="secondary-button logout-button">Cerrar sesión</button>
               <button id="adminBackButton2" class="secondary-button">Volver</button>
             </div>
 
