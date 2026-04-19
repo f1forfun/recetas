@@ -322,7 +322,7 @@
 
     .card img {
       width: 100%;
-      height: 240px;
+      height: 210px;
       object-fit: cover;
       transition: transform 500ms ease;
     }
@@ -346,12 +346,12 @@
     }
 
     .card-body {
-      padding: 16px 16px 18px;
+      padding: 14px 14px 16px;
     }
 
     .card-title {
       margin: 0 0 8px;
-      font-size: 21px;
+      font-size: 19px;
       line-height: 1.1;
       font-weight: 800;
       letter-spacing: -0.03em;
@@ -456,7 +456,7 @@
     }
 
     .video-button,
-    .primary-button,
+    .primary-button, 
     .secondary-button {
       display: inline-flex;
       align-items: center;
@@ -474,6 +474,7 @@
 
     .video-button {
       margin-top: 14px;
+      border: 1px solid rgba(142,106,90,0.22);
     }
     .primary-button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -811,12 +812,12 @@
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label" for="adminUsername">Usuario</label>
-              <input id="adminUsername" class="form-input" type="text" placeholder="Tu usuario admin">
+              <input id="adminUsername" class="form-input" type="text" placeholder="">
             </div>
 
             <div class="form-group">
               <label class="form-label" for="adminPassword">Contraseña</label>
-              <input id="adminPassword" class="form-input" type="password" placeholder="Tu contraseña">
+              <input id="adminPassword" class="form-input" type="password" placeholder="">
             </div>
 
             <div class="admin-actions">
@@ -867,6 +868,11 @@
             <div class="form-group">
               <label class="form-label" for="recipeLink">Link de vídeo</label>
               <input id="recipeLink" class="form-input" type="url" placeholder="https://www.tiktok.com/...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recipeImagen">Imagen (URL)</label>
+              <input id="recipeImagen" class="form-input" type="url" placeholder="https://...">
             </div>
 
             <label class="checkbox-row">
@@ -957,6 +963,7 @@
     const recipeIngredientes = document.getElementById("recipeIngredientes");
     const recipePasos = document.getElementById("recipePasos");
     const recipeLink = document.getElementById("recipeLink");
+    const recipeImagen = document.getElementById("recipeImagen");
     const recipeVisible = document.getElementById("recipeVisible");
 
     async function cargarRecetas() {
@@ -1364,6 +1371,7 @@
         pasos: recipePasos.value.trim(),
         fecha: recipeFecha.value,
         link: recipeLink.value.trim(),
+        imagen: recipeImagen.value.trim(),
         visible: recipeVisible.checked
       };
 
@@ -1410,6 +1418,7 @@
       recipePasos.value = "";
       recipeFecha.value = "";
       recipeLink.value = "";
+      recipeImagen.value = "";
       recipeVisible.checked = true;
     }
 
@@ -1429,7 +1438,13 @@
 
     function logoutAdmin() {
       clearAdminToken();
+
+      adminUsername.value = "";
+      adminPassword.value = "";
+      
       limpiarFormularioReceta();
+      limpiarMensaje(adminLoginMessage);
+      limpiarMensaje(adminFormMessage);
       prepararEstadoAdmin();
     }
 
