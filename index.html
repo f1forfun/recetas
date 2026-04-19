@@ -390,18 +390,25 @@
       grid-auto-columns: 85%;
       gap: 14px;
       overflow-x: auto;
-      padding: 0 6px 0 2px;
+      overflow-y: hidden;
+      padding: 4px 2px 10px;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
-
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
     }
 
     .featured-track::-webkit-scrollbar {
       display: none;
+    }
+
+    .featured-shell {
+      margin: 0 -14px;
+      padding: 6px 14px 12px;
+      overflow: hidden;
+      background: transparent;
     }
 
     .featured-card {
@@ -1006,7 +1013,9 @@
             </div>
           </div>
 
-          <div id="featuredTrack" class="featured-track"></div>
+          <div class="featured-shell">
+            <div id="featuredTrack" class="featured-track"></div>
+          </div>
         </section>
 
         <div class="section-header recipes-header">
