@@ -1,217 +1,483 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recetas</title>
-  <meta name="theme-color" content="#c96f4a">
+
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="theme-color" content="#c96f4a">
 
   <style>
     :root {
-      --bg: #f6f3ee;
-      --card: #ffffff;
-      --text: #1f1f1f;
-      --muted: #6b6b6b;
+      --bg: #f7f3ee;
+      --surface: #ffffff;
+      --surface-soft: #f3ebe6;
+      --text: #1f1b18;
+      --muted: #756b64;
       --accent: #c96f4a;
-      --radius: 18px;
-      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --accent-dark: #a95535;
+      --border: rgba(0,0,0,.06);
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.05);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --max-width: 760px;
     }
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at top, #fbf8f4 0%, var(--bg) 45%);
       color: var(--text);
     }
 
-    header {
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app-shell {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding-bottom: 28px;
+    }
+
+    .topbar {
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(246,243,238,.95);
-      backdrop-filter: blur(10px);
-      padding: 16px;
-      border-bottom: 1px solid rgba(0,0,0,.06);
+      z-index: 30;
+      padding: 14px 14px 12px;
+      backdrop-filter: blur(12px);
+      background: rgba(247,243,238,.88);
+      border-bottom: 1px solid transparent;
     }
 
-    h1 {
-      margin: 0 0 12px 0;
-      font-size: 24px;
-    }
-
-    .search-box {
-      width: 100%;
+    .topbar-inner {
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: var(--shadow-soft);
+      border-radius: 26px;
       padding: 14px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
-      border: 1px solid #ddd;
+      object-fit: cover;
+      box-shadow: var(--shadow-soft);
       background: #fff;
-      font-size: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px 14px 44px;
       outline: none;
+      box-shadow: var(--shadow-soft);
     }
 
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 16px;
+    .search-input:focus {
+      border-color: rgba(201,111,74,.35);
+      box-shadow: 0 0 0 4px rgba(201,111,74,.10);
     }
 
-    .grid {
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      opacity: .7;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 2px 14px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .section-meta {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+
+    .chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: .2s ease;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .list-view.grid {
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
     .card {
-      background: var(--card);
-      border-radius: var(--radius);
+      border: 0;
+      background: var(--surface);
+      border-radius: var(--radius-xl);
       overflow: hidden;
       box-shadow: var(--shadow);
       cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .card:active {
+      transform: scale(.99);
+    }
+
+    .card-image-wrap {
+      position: relative;
+      background: linear-gradient(180deg, #eee3dc, #e9ddd5);
     }
 
     .card img {
       width: 100%;
-      height: 210px;
+      height: 230px;
       object-fit: cover;
-      display: block;
-      background: #ece7df;
     }
 
-    .card-content {
-      padding: 14px;
-    }
-
-    .title {
-      font-size: 18px;
+    .card-category {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,.92);
+      color: var(--accent-dark);
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 6px;
+      box-shadow: var(--shadow-soft);
     }
 
-    .meta {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .description {
-      font-size: 14px;
-      color: #444;
-      line-height: 1.45;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .loading,
-    .empty,
-    .error {
-      text-align: center;
-      color: var(--muted);
-      padding: 30px 10px;
-    }
-
-    .back {
-      color: var(--accent);
-      font-weight: 600;
-      margin-bottom: 14px;
-      cursor: pointer;
-    }
-
-    .detail-image {
-      width: 100%;
-      max-height: 320px;
-      object-fit: cover;
-      border-radius: 20px;
-      margin-bottom: 16px;
-      background: #ece7df;
-    }
-
-    .section {
-      background: #fff;
-      border-radius: 18px;
+    .card-body {
       padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: var(--shadow);
     }
 
-    .section h2,
-    .section h3 {
-      margin-top: 0;
+    .card-title {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -.02em;
     }
 
-    ul, ol {
-      margin: 0;
-      padding-left: 20px;
-      line-height: 1.6;
+    .card-description {
+      margin: 0 0 12px;
+      color: #4e4742;
+      font-size: 14px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .pill {
-      display: inline-block;
-      padding: 6px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
       border-radius: 999px;
-      background: #f1e5df;
-      color: #8a4b31;
+      background: var(--surface-soft);
+      color: #7b5646;
       font-size: 12px;
-      margin-right: 6px;
-      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .state {
+      text-align: center;
+      color: var(--muted);
+      padding: 36px 16px;
+      background: rgba(255,255,255,.5);
+      border-radius: 18px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .detail-view {
+      animation: fadeIn .18s ease;
+    }
+
+    .detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0 14px;
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      box-shadow: var(--shadow-soft);
+      color: var(--accent-dark);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .hero-card {
+      background: var(--surface);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-height: 340px;
+      object-fit: cover;
+      background: linear-gradient(180deg, #eee3dc, #e9ddd5);
+    }
+
+    .hero-content {
+      padding: 18px;
+    }
+
+    .hero-title {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.06;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+
+    .hero-description {
+      margin: 0;
+      color: #4f4741;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .detail-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-section {
+      background: var(--surface);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .detail-section h3 {
+      margin: 0 0 14px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .detail-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.7;
+      color: #403934;
+    }
+
+    .detail-list li + li {
+      margin-top: 6px;
+    }
+
+    .detail-empty {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 700px) {
+      .list-view.grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🍽️ Recetas Familia</h1>
-    <input
-      id="searchInput"
-      class="search-box"
-      type="text"
-      placeholder="Buscar por nombre, descripción o ingredientes..."
-    >
-  </header>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-row">
+          <img class="brand-icon" src="./icon-192.png" alt="Icono Recetas">
+          <div class="brand-copy">
+            <h1 class="brand-title">Recetas</h1>
+            <p class="brand-subtitle">Tu recetario familiar en el móvil</p>
+          </div>
+        </div>
 
-  <main>
-    <div id="loading" class="loading">Cargando recetas...</div>
-    <div id="error" class="error hidden">No se pudieron cargar las recetas.</div>
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input
+            id="searchInput"
+            class="search-input"
+            type="text"
+            placeholder="Buscar por nombre, ingredientes o descripción"
+          >
+        </div>
+      </div>
+    </header>
 
-    <section id="listView" class="grid hidden"></section>
-    <section id="detailView" class="hidden"></section>
-  </main>
+    <main class="content">
+      <section id="listSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Todas las recetas</h2>
+            <p id="sectionMeta" class="section-meta">Cargando...</p>
+          </div>
+        </div>
+
+        <div id="categoryChips" class="chips hidden"></div>
+
+        <div id="loading" class="state">Cargando recetas...</div>
+        <div id="error" class="state hidden">No se pudieron cargar las recetas.</div>
+        <div id="listView" class="list-view grid hidden"></div>
+      </section>
+
+      <section id="detailView" class="detail-view hidden"></section>
+    </main>
+  </div>
 
   <script>
     const API_URL = "https://dark-flower-6570.wordpressadri.workers.dev/";
 
     let recetas = [];
     let recetasFiltradas = [];
+    let categoriaActiva = "";
 
     const loadingEl = document.getElementById("loading");
     const errorEl = document.getElementById("error");
     const listView = document.getElementById("listView");
     const detailView = document.getElementById("detailView");
     const searchInput = document.getElementById("searchInput");
+    const categoryChips = document.getElementById("categoryChips");
+    const listSection = document.getElementById("listSection");
+    const sectionMeta = document.getElementById("sectionMeta");
 
     async function cargarRecetas() {
       try {
         const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error("Error cargando recetas");
-        }
+        if (!response.ok) throw new Error("No se pudieron cargar las recetas");
 
         recetas = await response.json();
         recetasFiltradas = [...recetas];
 
+        renderCategorias();
+        aplicarFiltros();
+
         loadingEl.classList.add("hidden");
         listView.classList.remove("hidden");
-
-        renderLista();
       } catch (error) {
+        console.error(error);
         loadingEl.classList.add("hidden");
         errorEl.classList.remove("hidden");
-        console.error(error);
       }
     }
 
@@ -226,21 +492,68 @@
         .filter(Boolean);
     }
 
-    function filtrarRecetas() {
+    function truncarTexto(texto, max = 110) {
+      if (!texto) return "";
+      return texto.length > max ? texto.slice(0, max).trim() + "…" : texto;
+    }
+
+    function renderCategorias() {
+      const categorias = [...new Set(recetas.map(r => r.categoria).filter(Boolean))];
+
+      if (!categorias.length) {
+        categoryChips.classList.add("hidden");
+        return;
+      }
+
+      categoryChips.innerHTML = "";
+
+      const chipTodas = crearChip("Todas", "");
+      categoryChips.appendChild(chipTodas);
+
+      categorias.forEach(categoria => {
+        categoryChips.appendChild(crearChip(categoria, categoria));
+      });
+
+      categoryChips.classList.remove("hidden");
+      actualizarChips();
+    }
+
+    function crearChip(texto, valor) {
+      const button = document.createElement("button");
+      button.className = "chip";
+      button.textContent = texto;
+      button.addEventListener("click", () => {
+        categoriaActiva = valor;
+        actualizarChips();
+        aplicarFiltros();
+      });
+      button.dataset.value = valor;
+      return button;
+    }
+
+    function actualizarChips() {
+      const chips = categoryChips.querySelectorAll(".chip");
+      chips.forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.value === categoriaActiva);
+      });
+    }
+
+    function aplicarFiltros() {
       const texto = normalizarTexto(searchInput.value);
 
       recetasFiltradas = recetas.filter(receta => {
-        const nombre = normalizarTexto(receta.nombre);
-        const descripcion = normalizarTexto(receta.descripcion);
-        const ingredientes = normalizarTexto(receta.ingredientes);
+        const coincideTexto =
+          normalizarTexto(receta.nombre).includes(texto) ||
+          normalizarTexto(receta.descripcion).includes(texto) ||
+          normalizarTexto(receta.ingredientes).includes(texto);
 
-        return (
-          nombre.includes(texto) ||
-          descripcion.includes(texto) ||
-          ingredientes.includes(texto)
-        );
+        const coincideCategoria =
+          !categoriaActiva || receta.categoria === categoriaActiva;
+
+        return coincideTexto && coincideCategoria;
       });
 
+      sectionMeta.textContent = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
       renderLista();
     }
 
@@ -248,31 +561,31 @@
       listView.innerHTML = "";
 
       if (!recetasFiltradas.length) {
-        listView.innerHTML = `<div class="empty">No hay recetas que coincidan.</div>`;
+        listView.innerHTML = `<div class="state">No hay recetas que coincidan con tu búsqueda.</div>`;
         return;
       }
 
-      recetasFiltradas.forEach((receta) => {
-        const card = document.createElement("article");
-        card.className = "card";
+      recetasFiltradas.forEach(receta => {
+        const article = document.createElement("article");
+        article.className = "card";
 
-        card.innerHTML = `
-          ${receta.imagen ? `<img src="${receta.imagen}" alt="${receta.nombre}">` : ""}
-          <div class="card-content">
-            <div class="title">${receta.nombre || "Sin nombre"}</div>
-            <div class="meta">
-              ${receta.categoria ? receta.categoria : "Sin categoría"}
-              ${receta.fecha ? " · " + receta.fecha : ""}
+        article.innerHTML = `
+          <div class="card-image-wrap">
+            ${receta.imagen ? `<img src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+            ${receta.categoria ? `<div class="card-category">${escapeHtml(receta.categoria)}</div>` : ""}
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${escapeHtml(receta.nombre || "Sin nombre")}</h3>
+            <p class="card-description">${escapeHtml(truncarTexto(receta.descripcion || ""))}</p>
+            <div class="card-footer">
+              ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(receta.fecha)}</span>` : ""}
+              ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
             </div>
-            <div class="description">${receta.descripcion || ""}</div>
           </div>
         `;
 
-        card.addEventListener("click", () => {
-          renderDetalle(receta);
-        });
-
-        listView.appendChild(card);
+        article.addEventListener("click", () => renderDetalle(receta));
+        listView.appendChild(article);
       });
     }
 
@@ -281,66 +594,77 @@
       const pasos = convertirTextoEnLista(receta.pasos);
 
       detailView.innerHTML = `
-        <div class="back" id="backButton">← Volver</div>
+        <button class="detail-back" id="backButton">← Volver</button>
 
-        ${receta.imagen ? `<img class="detail-image" src="${receta.imagen}" alt="${receta.nombre}">` : ""}
-
-        <div class="section">
-          <h2>${receta.nombre || "Sin nombre"}</h2>
-          <p>${receta.descripcion || ""}</p>
-          <div>
-            ${receta.categoria ? `<span class="pill">${receta.categoria}</span>` : ""}
-            ${receta.fecha ? `<span class="pill">${receta.fecha}</span>` : ""}
+        <article class="hero-card">
+          ${receta.imagen ? `<img class="hero-image" src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+          <div class="hero-content">
+            <h2 class="hero-title">${escapeHtml(receta.nombre || "Sin nombre")}</h2>
+            <p class="hero-description">${escapeHtml(receta.descripcion || "")}</p>
+            <div style="margin-top:14px;">
+              ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
+              ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(receta.fecha)}</span>` : ""}
+            </div>
           </div>
-        </div>
+        </article>
 
-        <div class="section">
-          <h3>Ingredientes</h3>
-          ${
-            ingredientes.length
-              ? `<ul>${ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>`
-              : `<p>No hay ingredientes.</p>`
-          }
-        </div>
+        <div class="detail-grid">
+          <section class="detail-section">
+            <h3>Ingredientes</h3>
+            ${
+              ingredientes.length
+                ? `<ul class="detail-list">${ingredientes.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+                : `<p class="detail-empty">No hay ingredientes.</p>`
+            }
+          </section>
 
-        <div class="section">
-          <h3>Pasos</h3>
-          ${
-            pasos.length
-              ? `<ol>${pasos.map(item => `<li>${item}</li>`).join("")}</ol>`
-              : `<p>No hay pasos.</p>`
-          }
+          <section class="detail-section">
+            <h3>Pasos</h3>
+            ${
+              pasos.length
+                ? `<ol class="detail-list">${pasos.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`
+                : `<p class="detail-empty">No hay pasos.</p>`
+            }
+          </section>
         </div>
       `;
 
       document.getElementById("backButton").addEventListener("click", volverALista);
 
-      listView.classList.add("hidden");
+      listSection.classList.add("hidden");
       detailView.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function volverALista() {
       detailView.classList.add("hidden");
-      listView.classList.remove("hidden");
+      listSection.classList.remove("hidden");
     }
 
-    searchInput.addEventListener("input", filtrarRecetas);
+    function escapeHtml(text) {
+      return (text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    searchInput.addEventListener("input", aplicarFiltros);
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then((registration) => {
+            console.log("SW registrado", registration.scope);
+          })
+          .catch((err) => {
+            console.log("Error SW", err);
+          });
+      });
+    }
 
     cargarRecetas();
-    
-    if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .then((registration) => {
-        console.log("SW registrado", registration.scope);
-      })
-      .catch((err) => {
-        console.log("Error SW", err);
-      });
-  });
-}
-    
   </script>
 </body>
 </html>
