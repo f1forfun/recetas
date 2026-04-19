@@ -30,6 +30,12 @@
       --radius-md: 16px;
       --max-width: 820px;
       --ease: 240ms cubic-bezier(.2,.8,.2,1);
+      --header-progress: 0;
+      --header-title-size: calc(24px - (3px * var(--header-progress)));
+      --header-icon-size: calc(46px - (6px * var(--header-progress)));
+      --header-inner-padding-y: calc(16px - (4px * var(--header-progress)));
+      --header-subtitle-opacity: calc(1 - var(--header-progress));
+      --header-subtitle-shift: calc(-6px * var(--header-progress));
     }
 
     * {
@@ -84,34 +90,12 @@
     }
 
     .topbar-inner {
-      padding: 16px;
+      padding: var(--header-inner-padding-y) 16px;
       border-radius: 30px;
       background: rgba(255,255,255,0.58);
       border: 1px solid rgba(255,255,255,0.7);
       box-shadow: var(--shadow-soft);
-      transition:
-        padding 260ms cubic-bezier(.2,.8,.2,1),
-        box-shadow 220ms ease,
-        background 220ms ease;
-    }
-    
-    .topbar.compact .brand-subtitle {
-      opacity: 0;
-      transform: translateY(-6px) scale(0.98);
-      pointer-events: none;
-    }
-
-    .topbar.compact .topbar-inner {
-      padding: 12px 14px;
-    }
-
-    .topbar.compact .brand-title {
-      font-size: 21px;
-    }
-
-    .topbar.compact .brand-icon {
-      width: 40px;
-      height: 40px;
+      transition: none;
     }
 
     .brand-row {
@@ -130,18 +114,15 @@
     }
 
     .brand-icon {
-      width: 46px;
-      height: 46px;
+      width: var(--header-icon-size);
+      height: var(--header-icon-size);
       border-radius: 15px;
       object-fit: cover;
       background: #fff;
       border: 1px solid var(--border);
       box-shadow: 0 8px 18px rgba(0,0,0,0.08);
       flex-shrink: 0;
-      transition:
-        width 260ms cubic-bezier(.2,.8,.2,1),
-        height 260ms cubic-bezier(.2,.8,.2,1),
-        border-radius 260ms cubic-bezier(.2,.8,.2,1);
+      transition: none;
     }
 
     .brand-copy {
@@ -150,25 +131,22 @@
 
     .brand-title {
       margin: 0;
-      font-size: 24px;
+      font-size: var(--header-title-size);
       line-height: 1.05;
       font-weight: 800;
       letter-spacing: -0.03em;
-      transition:
-        font-size 260ms cubic-bezier(.2,.8,.2,1),
-        line-height 260ms cubic-bezier(.2,.8,.2,1);
+      transition: none;
     }
 
     .brand-subtitle {
       margin: 4px 0 0;
       font-size: 13px;
       color: var(--muted);
-      opacity: 1;
-      transform: translateY(0);
+      opacity: var(--header-subtitle-opacity);
+      transform: translateY(var(--header-subtitle-shift));
       transform-origin: top left;
-      transition:
-        opacity 180ms ease,
-        transform 220ms cubic-bezier(.2,.8,.2,1);
+      will-change: opacity, transform;
+      transition: none;
     }
 
     .topbar-actions {
@@ -1555,20 +1533,47 @@
 
     cargarRecetas();
     
-    const topbar = document.querySelector(".topbar");
-    let isCompact = false;
+    const root = document.documentElement;
 
-    window.addEventListener("scroll", () => {
+    let currentProgress = 0;
+    let targetProgress = 0;
+    let tickingHeader = false;
+
+    function updateHeaderTarget() {
       const y = window.scrollY;
+      const start = 20;   // empieza a comprimirse
+      const end = 120;    // totalmente comprimido
 
-      if (!isCompact && y > 110) {
-        topbar.classList.add("compact");
-        isCompact = true;
-      } else if (isCompact && y < 35) {
-        topbar.classList.remove("compact");
-        isCompact = false;
+      const raw = (y - start) / (end - start);
+      targetProgress = Math.max(0, Math.min(1, raw));
+
+      if (!tickingHeader) {
+        tickingHeader = true;
+        requestAnimationFrame(animateHeader);
       }
-    });
+    }
+
+    function animateHeader() {
+      const diff = targetProgress - currentProgress;
+
+      // suavizado
+      currentProgress += diff * 0.14;
+
+      if (Math.abs(diff) < 0.001) {
+        currentProgress = targetProgress;
+      }
+
+      root.style.setProperty("--header-progress", currentProgress.toFixed(4));
+
+      if (Math.abs(targetProgress - currentProgress) > 0.001) {
+        requestAnimationFrame(animateHeader);
+      } else {
+        tickingHeader = false;
+      }
+    }
+
+    window.addEventListener("scroll", updateHeaderTarget, { passive: true });
+    window.addEventListener("load", updateHeaderTarget);
     
   </script>
 </body>
