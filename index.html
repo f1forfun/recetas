@@ -888,7 +888,19 @@
   </aside>
 
   <script>
-    const API_URL = "https://dark-flower-6570.wordpressadri.workers.dev";
+    const API_BASE = "https://dark-flower-6570.wordpressadri.workers.dev".replace(/\/+$/, "");
+
+    function getRecipesUrl() {
+      return `${API_BASE}/`;
+    }
+
+    function getLoginUrl() {
+      return `${API_BASE}/login`;
+    }
+
+    function getCreateRecipeUrl() {
+      return `${API_BASE}/create-recipe`;
+    }
 
     let recetas = [];
     let recetasFiltradas = [];
@@ -935,7 +947,7 @@
 
     async function cargarRecetas() {
       try {
-        const response = await fetch(API_BASE);
+        const response = await fetch(getRecipesUrl());
         if (!response.ok) throw new Error("No se pudieron cargar las recetas");
 
         recetas = await response.json();
@@ -949,9 +961,10 @@
 
         restaurarEstadoDesdeURL();
       } catch (error) {
-        console.error(error);
+        console.error("ERROR cargarRecetas:", error);
         loadingEl.classList.add("hidden");
         errorEl.classList.remove("hidden");
+        errorEl.textContent = "No se pudieron cargar las recetas.";
       }
     }
 
@@ -1290,7 +1303,7 @@
       }
 
       try {
-        const response = await fetch(`${API_BASE}/login`, {
+        const response = await fetch(getLoginUrl(), {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -1346,7 +1359,7 @@
       }
 
       try {
-        const response = await fetch(`${API_BASE}/create-recipe`, {
+        const response = await fetch(getCreateRecipeUrl(), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1390,6 +1403,8 @@
       try {
         const response = await fetch(API_BASE);
         if (!response.ok) return;
+        console.log("GET recetas URL:", getRecipesUrl());
+        console.log("GET recetas status:", response.status);
         recetas = await response.json();
         renderCategorias();
         aplicarFiltros();
