@@ -69,72 +69,66 @@
       padding-bottom: 34px;
     }
 
-    @media (max-width: 768px) {
-        .topbar {
-          position: sticky;
-          top: 0;
-          z-index: 40;
-          padding: 14px 14px 12px;
-          background: linear-gradient(
-            to bottom,
-            rgba(245,241,236,0.95) 0%,
-            rgba(245,241,236,0.88) 70%,
-            rgba(245,241,236,0.25) 100%
-          );
-          backdrop-filter: blur(6px);
-        }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 14px 14px 10px;
+      background: linear-gradient(
+        to bottom,
+        rgba(245,241,236,0.96) 0%,
+        rgba(245,241,236,0.90) 70%,
+        rgba(245,241,236,0.35) 100%
+      );
+      backdrop-filter: blur(8px);
     }
 
     .topbar-inner {
-      padding: 16px;
-      border-radius: 30px;
-      background: rgba(255,255,255,0.58);
-      border: 1px solid rgba(255,255,255,0.7);
+      padding: 14px 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.75);
       box-shadow: var(--shadow-soft);
-      transition:
-        padding 220ms ease,
-        box-shadow 220ms ease,
-        background 220ms ease;
     }
 
     .brand-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: calc(12px - (4px * var(--header-progress)));
+      gap: 14px;
     }
 
     .brand-left {
       display: flex;
       align-items: center;
-      gap: calc(12px - (4px * var(--header-progress)));
+      gap: 14px;
       min-width: 0;
       flex: 1;
     }
 
     .brand-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 15px;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
       object-fit: cover;
       background: #fff;
       border: 1px solid var(--border);
       box-shadow: 0 8px 18px rgba(0,0,0,0.08);
       flex-shrink: 0;
-      transition: width 220ms ease, height 220ms ease;
     }
 
     .brand-copy {
       min-width: 0;
+      display: flex;
+      align-items: center;
     }
 
     .brand-title {
       margin: 0;
-      font-size: 24px;
-      line-height: 1.05;
+      font-size: 22px;
+      line-height: 1;
       font-weight: 800;
       letter-spacing: -0.03em;
-      transition: font-size 220ms ease;
     }
 
     .brand-subtitle {
@@ -152,30 +146,10 @@
       gap: 10px;
       flex-shrink: 0;
     }
-
-    .topbar.compact .topbar-inner {
-      padding: 10px 14px;
-    }
-
-    .topbar.compact .brand-title {
-      font-size: 20px;
-    }
-
-    .topbar.compact .brand-icon {
-      width: 38px;
-      height: 38px;
-    }
-
-    .topbar.compact .brand-subtitle {
-      opacity: 0;
-      transform: translateY(-4px);
-      pointer-events: none;
-      position: absolute;
-    }
     
     .icon-button {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.92);
       border-radius: 14px;
@@ -273,6 +247,55 @@
 
     .content {
       padding: 6px 14px 14px;
+    }
+
+    .intro-card {
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.92),
+        rgba(255,255,255,0.78)
+      );
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow-card);
+      border-radius: 28px;
+      padding: 20px 18px;
+      margin-bottom: 18px;
+    }
+
+    .intro-copy {
+      display: grid;
+      gap: 8px;
+    }
+
+    .intro-eyebrow {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .intro-title {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .intro-text {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4d433d;
+    }
+
+    .intro-count {
+      margin: 4px 0 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
     }
 
     .section-header {
@@ -817,7 +840,6 @@
             <img class="brand-icon" src="./icon-192.png" alt="Icono Recetas">
             <div class="brand-copy">
               <h1 class="brand-title">Recetas</h1>
-              <p class="brand-subtitle">Tu recetario familiar, bonito y a mano</p>
             </div>
           </div>
 
@@ -843,6 +865,16 @@
     </header>
 
     <main class="content">
+      <section id="homeIntro" class="intro-card">
+      <div class="intro-copy">
+        <h2 class="intro-title">Tu cocina de siempre, en el móvil</h2>
+        <p class="intro-text">
+          Guarda tus recetas favoritas, accede rápido a ingredientes y pasos,
+          y comparte todo con la familia de forma sencilla.
+        </p>
+        <p id="introCount" class="intro-count">Cargando recetas...</p>
+  </div>
+</section>
       <section id="listSection">
         <div class="section-header">
           <div>
@@ -1004,6 +1036,7 @@
     const categoryChips = document.getElementById("categoryChips");
     const listSection = document.getElementById("listSection");
     const sectionMeta = document.getElementById("sectionMeta");
+    const introCount = document.getElementById("introCount");
 
     const adminLoginCard = document.getElementById("adminLoginCard");
     const adminFormCard = document.getElementById("adminFormCard");
@@ -1176,6 +1209,9 @@
       });
 
       sectionMeta.textContent = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
+      const totalTexto = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
+      sectionMeta.textContent = totalTexto;
+      introCount.textContent = totalTexto + " disponibles";
       renderLista();
     }
 
@@ -1550,20 +1586,7 @@
 
     cargarRecetas();
     
-    const topbar = document.querySelector(".topbar");
-    let isCompact = false;
-
-    window.addEventListener("scroll", () => {
-      const y = window.scrollY;
-
-      if (!isCompact && y > 90) {
-        topbar.classList.add("compact");
-        isCompact = true;
-      } else if (isCompact && y < 40) {
-        topbar.classList.remove("compact");
-        isCompact = false;
-      }
-    }, { passive: true });
+    
     
   </script>
 </body>
