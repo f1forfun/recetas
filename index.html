@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recetas Familia</title>
+  <meta name="theme-color" content="#c96f4a">
+
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b6b6b;
+      --accent: #c96f4a;
+      --radius: 18px;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246,243,238,.95);
+      backdrop-filter: blur(10px);
+      padding: 16px;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 24px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #ddd;
+      background: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .card img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+      background: #ece7df;
+    }
+
+    .card-content {
+      padding: 14px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .description {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.45;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 10px;
+    }
+
+    .back {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    .detail-image {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      background: #ece7df;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2,
+    .section h3 {
+      margin-top: 0;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f1e5df;
+      color: #8a4b31;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍽️ Recetas Familia</h1>
+    <input
+      id="searchInput"
+      class="search-box"
+      type="text"
+      placeholder="Buscar por nombre, descripción o ingredientes..."
+    >
+  </header>
+
+  <main>
+    <div id="loading" class="loading">Cargando recetas...</div>
+    <div id="error" class="error hidden">No se pudieron cargar las recetas.</div>
+
+    <section id="listView" class="grid hidden"></section>
+    <section id="detailView" class="hidden"></section>
+  </main>
+
+  <script>
+    const API_URL = "https://dark-flower-6570.wordpressadri.workers.dev/";
+
+    let recetas = [];
+    let recetasFiltradas = [];
+
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const listView = document.getElementById("listView");
+    const detailView = document.getElementById("detailView");
+    const searchInput = document.getElementById("searchInput");
+
+    async function cargarRecetas() {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("Error cargando recetas");
+        }
+
+        recetas = await response.json();
+        recetasFiltradas = [...recetas];
+
+        loadingEl.classList.add("hidden");
+        listView.classList.remove("hidden");
+
+        renderLista();
+      } catch (error) {
+        loadingEl.classList.add("hidden");
+        errorEl.classList.remove("hidden");
+        console.error(error);
+      }
+    }
+
+    function normalizarTexto(texto) {
+      return (texto || "").toLowerCase().trim();
+    }
+
+    function convertirTextoEnLista(texto) {
+      return (texto || "")
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function filtrarRecetas() {
+      const texto = normalizarTexto(searchInput.value);
+
+      recetasFiltradas = recetas.filter(receta => {
+        const nombre = normalizarTexto(receta.nombre);
+        const descripcion = normalizarTexto(receta.descripcion);
+        const ingredientes = normalizarTexto(receta.ingredientes);
+
+        return (
+          nombre.includes(texto) ||
+          descripcion.includes(texto) ||
+          ingredientes.includes(texto)
+        );
+      });
+
+      renderLista();
+    }
+
+    function renderLista() {
+      listView.innerHTML = "";
+
+      if (!recetasFiltradas.length) {
+        listView.innerHTML = `<div class="empty">No hay recetas que coincidan.</div>`;
+        return;
+      }
+
+      recetasFiltradas.forEach((receta) => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        card.innerHTML = `
+          ${receta.imagen ? `<img src="${receta.imagen}" alt="${receta.nombre}">` : ""}
+          <div class="card-content">
+            <div class="title">${receta.nombre || "Sin nombre"}</div>
+            <div class="meta">
+              ${receta.categoria ? receta.categoria : "Sin categoría"}
+              ${receta.fecha ? " · " + receta.fecha : ""}
+            </div>
+            <div class="description">${receta.descripcion || ""}</div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          renderDetalle(receta);
+        });
+
+        listView.appendChild(card);
+      });
+    }
+
+    function renderDetalle(receta) {
+      const ingredientes = convertirTextoEnLista(receta.ingredientes);
+      const pasos = convertirTextoEnLista(receta.pasos);
+
+      detailView.innerHTML = `
+        <div class="back" id="backButton">← Volver</div>
+
+        ${receta.imagen ? `<img class="detail-image" src="${receta.imagen}" alt="${receta.nombre}">` : ""}
+
+        <div class="section">
+          <h2>${receta.nombre || "Sin nombre"}</h2>
+          <p>${receta.descripcion || ""}</p>
+          <div>
+            ${receta.categoria ? `<span class="pill">${receta.categoria}</span>` : ""}
+            ${receta.fecha ? `<span class="pill">${receta.fecha}</span>` : ""}
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Ingredientes</h3>
+          ${
+            ingredientes.length
+              ? `<ul>${ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>`
+              : `<p>No hay ingredientes.</p>`
+          }
+        </div>
+
+        <div class="section">
+          <h3>Pasos</h3>
+          ${
+            pasos.length
+              ? `<ol>${pasos.map(item => `<li>${item}</li>`).join("")}</ol>`
+              : `<p>No hay pasos.</p>`
+          }
+        </div>
+      `;
+
+      document.getElementById("backButton").addEventListener("click", volverALista);
+
+      listView.classList.add("hidden");
+      detailView.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function volverALista() {
+      detailView.classList.add("hidden");
+      listView.classList.remove("hidden");
+    }
+
+    searchInput.addEventListener("input", filtrarRecetas);
+
+    cargarRecetas();
+  </script>
+</body>
+</html>
