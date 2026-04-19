@@ -20,6 +20,8 @@
       --accent: #8e6a5a;
       --accent-2: #b78766;
       --accent-soft: #efe3da;
+      --success: #2f7d57;
+      --danger: #b14f45;
       --border: rgba(68, 47, 35, 0.08);
       --shadow-soft: 0 10px 30px rgba(48, 32, 24, 0.08);
       --shadow-card: 0 18px 45px rgba(48, 32, 24, 0.10);
@@ -55,6 +57,8 @@
 
     button,
     input,
+    textarea,
+    select,
     a {
       font: inherit;
     }
@@ -126,7 +130,14 @@
       color: var(--muted);
     }
 
-    .search-toggle {
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .icon-button {
       width: 44px;
       height: 44px;
       border: 1px solid var(--border);
@@ -141,11 +152,11 @@
       flex-shrink: 0;
     }
 
-    .search-toggle:active {
+    .icon-button:active {
       transform: scale(.96);
     }
 
-    .search-toggle.active {
+    .icon-button.active {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #fff;
       border-color: transparent;
@@ -189,9 +200,13 @@
       transition: border-color var(--ease), box-shadow var(--ease);
     }
 
-    .search-input:focus {
+    .search-input:focus,
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
       border-color: rgba(142,106,90,0.32);
       box-shadow: 0 0 0 5px rgba(142,106,90,0.10), var(--shadow-soft);
+      outline: none;
     }
 
     .search-icon {
@@ -353,7 +368,8 @@
       overflow: hidden;
     }
 
-    .card-footer {
+    .card-footer,
+    .hero-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -401,7 +417,6 @@
       box-shadow: var(--shadow-soft);
       margin: 6px 0 16px;
       cursor: pointer;
-      text-decoration: none;
     }
 
     .hero-card {
@@ -438,26 +453,41 @@
       line-height: 1.65;
     }
 
-    .hero-pills {
-      margin-top: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .video-button {
-      margin-top: 16px;
+    .video-button,
+    .primary-button,
+    .secondary-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 16px;
+      min-height: 46px;
       border-radius: 16px;
+      padding: 12px 16px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 0;
+      font-weight: 700;
+      transition: transform var(--ease), opacity var(--ease), box-shadow var(--ease);
+    }
+
+    .video-button,
+    .primary-button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #fff;
-      font-weight: 700;
-      text-decoration: none;
       box-shadow: var(--shadow-soft);
+    }
+
+    .secondary-button {
+      background: rgba(255,255,255,0.95);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .video-button:active,
+    .primary-button:active,
+    .secondary-button:active {
+      transform: scale(.98);
     }
 
     .detail-grid {
@@ -465,14 +495,16 @@
       gap: 14px;
     }
 
-    .detail-section {
+    .detail-section,
+    .admin-card {
       background: rgba(255,255,255,0.94);
       border-radius: 24px;
       padding: 18px;
       box-shadow: var(--shadow-card);
     }
 
-    .detail-section h3 {
+    .detail-section h3,
+    .admin-card h3 {
       margin: 0 0 14px;
       font-size: 17px;
       font-weight: 800;
@@ -493,6 +525,178 @@
     .detail-empty {
       margin: 0;
       color: var(--muted);
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(34, 29, 26, 0.28);
+      backdrop-filter: blur(2px);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--ease);
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(86vw, 360px);
+      height: 100vh;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(14px);
+      box-shadow: -12px 0 30px rgba(0,0,0,0.10);
+      z-index: 90;
+      transform: translateX(100%);
+      transition: transform var(--ease);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .drawer-close {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .drawer-menu {
+      display: grid;
+      gap: 10px;
+    }
+
+    .menu-item {
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      font-weight: 700;
+    }
+
+    .admin-view {
+      animation: fadeSlideIn 320ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .admin-title {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.96);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .form-textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      gap: 12px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .status-message {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-success {
+      background: rgba(47,125,87,0.12);
+      color: var(--success);
+    }
+
+    .status-error {
+      background: rgba(177,79,69,0.12);
+      color: var(--danger);
     }
 
     @keyframes fadeSlideIn {
@@ -521,6 +725,10 @@
       .list-view {
         grid-template-columns: 1fr 1fr;
       }
+
+      .form-row.two {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
@@ -537,9 +745,10 @@
             </div>
           </div>
 
-          <button id="searchToggle" class="search-toggle" aria-label="Abrir búsqueda">
-            🔍
-          </button>
+          <div class="topbar-actions">
+            <button id="searchToggle" class="icon-button" aria-label="Abrir búsqueda">🔍</button>
+            <button id="menuToggle" class="icon-button" aria-label="Abrir menú">☰</button>
+          </div>
         </div>
 
         <div id="searchPanel" class="search-panel">
@@ -574,11 +783,112 @@
       </section>
 
       <section id="detailView" class="detail-view hidden"></section>
+
+      <section id="adminView" class="admin-view hidden">
+        <div class="admin-header">
+          <div>
+            <h2 class="admin-title">Gestionar recetas</h2>
+            <p class="admin-subtitle">Acceso privado para añadir nuevas recetas</p>
+          </div>
+        </div>
+
+        <div id="adminLoginCard" class="admin-card">
+          <h3>Acceso</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="adminUsername">Usuario</label>
+              <input id="adminUsername" class="form-input" type="text" placeholder="Tu usuario admin">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="adminPassword">Contraseña</label>
+              <input id="adminPassword" class="form-input" type="password" placeholder="Tu contraseña">
+            </div>
+
+            <div class="admin-actions">
+              <button id="adminLoginButton" class="primary-button">Entrar</button>
+              <button id="adminBackButton1" class="secondary-button">Volver</button>
+            </div>
+
+            <div id="adminLoginMessage"></div>
+          </div>
+        </div>
+
+        <div id="adminFormCard" class="admin-card hidden">
+          <h3>Nueva receta</h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="recipeNombre">Nombre</label>
+              <input id="recipeNombre" class="form-input" type="text" placeholder="Ej. Lasaña casera">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recipeDescripcion">Descripción</label>
+              <textarea id="recipeDescripcion" class="form-textarea" placeholder="Describe la receta brevemente"></textarea>
+            </div>
+
+            <div class="form-row two">
+              <div class="form-group">
+                <label class="form-label" for="recipeCategoria">Categoría</label>
+                <input id="recipeCategoria" class="form-input" type="text" placeholder="Ej. Comida">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="recipeFecha">Fecha</label>
+                <input id="recipeFecha" class="form-input" type="date">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recipeIngredientes">Ingredientes</label>
+              <textarea id="recipeIngredientes" class="form-textarea" placeholder="Uno por línea"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recipePasos">Pasos</label>
+              <textarea id="recipePasos" class="form-textarea" placeholder="Uno por línea"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recipeLink">Link de vídeo</label>
+              <input id="recipeLink" class="form-input" type="url" placeholder="https://www.tiktok.com/...">
+            </div>
+
+            <label class="checkbox-row">
+              <input id="recipeVisible" type="checkbox" checked>
+              <span>Visible en la app</span>
+            </label>
+
+            <div class="admin-actions">
+              <button id="saveRecipeButton" class="primary-button">Guardar receta</button>
+              <button id="logoutAdminButton" class="secondary-button">Cerrar sesión</button>
+              <button id="adminBackButton2" class="secondary-button">Volver</button>
+            </div>
+
+            <div id="adminFormMessage"></div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Menú</h3>
+      <button id="drawerClose" class="drawer-close" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    <div class="drawer-menu">
+      <button id="menuHome" class="menu-item">Inicio</button>
+      <button id="menuAdmin" class="menu-item">Gestionar recetas</button>
+    </div>
+  </aside>
+
   <script>
-    const API_URL = "https://dark-flower-6570.wordpressadri.workers.dev/";
+    const API_BASE = "PEGA_AQUI_TU_URL_DEL_WORKER";
 
     let recetas = [];
     let recetasFiltradas = [];
@@ -589,17 +899,43 @@
     const errorEl = document.getElementById("error");
     const listView = document.getElementById("listView");
     const detailView = document.getElementById("detailView");
+    const adminView = document.getElementById("adminView");
     const searchInput = document.getElementById("searchInput");
     const searchPanel = document.getElementById("searchPanel");
     const searchToggle = document.getElementById("searchToggle");
     const searchClose = document.getElementById("searchClose");
+    const menuToggle = document.getElementById("menuToggle");
+    const drawer = document.getElementById("drawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const drawerClose = document.getElementById("drawerClose");
     const categoryChips = document.getElementById("categoryChips");
     const listSection = document.getElementById("listSection");
     const sectionMeta = document.getElementById("sectionMeta");
 
+    const adminLoginCard = document.getElementById("adminLoginCard");
+    const adminFormCard = document.getElementById("adminFormCard");
+    const adminUsername = document.getElementById("adminUsername");
+    const adminPassword = document.getElementById("adminPassword");
+    const adminLoginButton = document.getElementById("adminLoginButton");
+    const adminLoginMessage = document.getElementById("adminLoginMessage");
+    const adminBackButton1 = document.getElementById("adminBackButton1");
+    const adminBackButton2 = document.getElementById("adminBackButton2");
+    const logoutAdminButton = document.getElementById("logoutAdminButton");
+    const saveRecipeButton = document.getElementById("saveRecipeButton");
+    const adminFormMessage = document.getElementById("adminFormMessage");
+
+    const recipeNombre = document.getElementById("recipeNombre");
+    const recipeDescripcion = document.getElementById("recipeDescripcion");
+    const recipeCategoria = document.getElementById("recipeCategoria");
+    const recipeFecha = document.getElementById("recipeFecha");
+    const recipeIngredientes = document.getElementById("recipeIngredientes");
+    const recipePasos = document.getElementById("recipePasos");
+    const recipeLink = document.getElementById("recipeLink");
+    const recipeVisible = document.getElementById("recipeVisible");
+
     async function cargarRecetas() {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_BASE);
         if (!response.ok) throw new Error("No se pudieron cargar las recetas");
 
         recetas = await response.json();
@@ -640,6 +976,16 @@
     function toggleBuscador() {
       if (busquedaAbierta) cerrarBuscador(false);
       else abrirBuscador();
+    }
+
+    function abrirDrawer() {
+      drawer.classList.add("open");
+      drawerOverlay.classList.add("open");
+    }
+
+    function cerrarDrawer() {
+      drawer.classList.remove("open");
+      drawerOverlay.classList.remove("open");
     }
 
     function normalizarTexto(texto) {
@@ -813,7 +1159,7 @@
 
       document.getElementById("backButton").addEventListener("click", volverALista);
 
-      listSection.classList.add("hidden");
+      ocultarTodo();
       detailView.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -824,8 +1170,35 @@
       }
     }
 
+    function mostrarAdmin(pushState = true) {
+      ocultarTodo();
+      adminView.classList.remove("hidden");
+      prepararEstadoAdmin();
+
+      if (pushState) {
+        const url = new URL(window.location.href);
+        url.hash = "admin";
+        history.pushState({ view: "admin" }, "", url);
+      }
+    }
+
+    function prepararEstadoAdmin() {
+      const token = getAdminToken();
+
+      limpiarMensaje(adminLoginMessage);
+      limpiarMensaje(adminFormMessage);
+
+      if (token) {
+        adminLoginCard.classList.add("hidden");
+        adminFormCard.classList.remove("hidden");
+      } else {
+        adminLoginCard.classList.remove("hidden");
+        adminFormCard.classList.add("hidden");
+      }
+    }
+
     function volverALista(fromPopState = false) {
-      detailView.classList.add("hidden");
+      ocultarTodo();
       listSection.classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -836,22 +1209,34 @@
       }
     }
 
+    function ocultarTodo() {
+      listSection.classList.add("hidden");
+      detailView.classList.add("hidden");
+      adminView.classList.add("hidden");
+    }
+
     function restaurarEstadoDesdeURL() {
       const hash = window.location.hash || "";
-      if (!hash.startsWith("#receta=")) {
-        history.replaceState({ view: "list" }, "", window.location.href);
+
+      if (hash === "#admin") {
+        history.replaceState({ view: "admin" }, "", window.location.href);
+        mostrarAdmin(false);
         return;
       }
 
-      const recetaId = hash.replace("#receta=", "");
-      const receta = recetas.find(r => r.id === recetaId);
+      if (hash.startsWith("#receta=")) {
+        const recetaId = hash.replace("#receta=", "");
+        const receta = recetas.find(r => r.id === recetaId);
 
-      if (receta) {
-        history.replaceState({ view: "detail", recetaId }, "", window.location.href);
-        abrirReceta(receta, false);
-      } else {
-        history.replaceState({ view: "list" }, "", window.location.pathname + window.location.search);
+        if (receta) {
+          history.replaceState({ view: "detail", recetaId }, "", window.location.href);
+          abrirReceta(receta, false);
+          return;
+        }
       }
+
+      history.replaceState({ view: "list" }, "", window.location.pathname + window.location.search);
+      volverALista(true);
     }
 
     window.addEventListener("popstate", (event) => {
@@ -862,20 +1247,189 @@
         return;
       }
 
+      if (state.view === "admin") {
+        mostrarAdmin(false);
+        return;
+      }
+
       if (state.view === "detail" && state.recetaId) {
         const receta = recetas.find(r => r.id === state.recetaId);
         if (receta) abrirReceta(receta, false);
       }
     });
 
-    searchToggle.addEventListener("click", toggleBuscador);
+    function setAdminToken(token) {
+      localStorage.setItem("admin_token", token);
+    }
 
+    function getAdminToken() {
+      return localStorage.getItem("admin_token") || "";
+    }
+
+    function clearAdminToken() {
+      localStorage.removeItem("admin_token");
+    }
+
+    function mostrarMensaje(element, texto, tipo) {
+      element.innerHTML = `<div class="status-message ${tipo === "error" ? "status-error" : "status-success"}">${escapeHtml(texto)}</div>`;
+    }
+
+    function limpiarMensaje(element) {
+      element.innerHTML = "";
+    }
+
+    async function loginAdmin() {
+      limpiarMensaje(adminLoginMessage);
+
+      const username = adminUsername.value.trim();
+      const password = adminPassword.value;
+
+      if (!username || !password) {
+        mostrarMensaje(adminLoginMessage, "Introduce usuario y contraseña.", "error");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          mostrarMensaje(adminLoginMessage, data.error || "No se pudo iniciar sesión.", "error");
+          return;
+        }
+
+        setAdminToken(data.token);
+        adminPassword.value = "";
+        mostrarMensaje(adminLoginMessage, "Acceso correcto.", "success");
+
+        setTimeout(() => {
+          limpiarMensaje(adminLoginMessage);
+          prepararEstadoAdmin();
+        }, 500);
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje(adminLoginMessage, "Error de conexión con el servidor.", "error");
+      }
+    }
+
+    async function guardarReceta() {
+      limpiarMensaje(adminFormMessage);
+
+      const token = getAdminToken();
+      if (!token) {
+        mostrarMensaje(adminFormMessage, "Sesión expirada. Vuelve a iniciar sesión.", "error");
+        prepararEstadoAdmin();
+        return;
+      }
+
+      const payload = {
+        nombre: recipeNombre.value.trim(),
+        descripcion: recipeDescripcion.value.trim(),
+        categoria: recipeCategoria.value.trim(),
+        ingredientes: recipeIngredientes.value.trim(),
+        pasos: recipePasos.value.trim(),
+        fecha: recipeFecha.value,
+        link: recipeLink.value.trim(),
+        visible: recipeVisible.checked
+      };
+
+      if (!payload.nombre) {
+        mostrarMensaje(adminFormMessage, "El nombre es obligatorio.", "error");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/create-recipe`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          mostrarMensaje(
+            adminFormMessage,
+            data.error || "No se pudo guardar la receta.",
+            "error"
+          );
+          return;
+        }
+
+        mostrarMensaje(adminFormMessage, "Receta creada correctamente.", "success");
+        limpiarFormularioReceta();
+        await cargarRecetasEnSegundoPlano();
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje(adminFormMessage, "Error al guardar la receta.", "error");
+      }
+    }
+
+    function limpiarFormularioReceta() {
+      recipeNombre.value = "";
+      recipeDescripcion.value = "";
+      recipeCategoria.value = "";
+      recipeIngredientes.value = "";
+      recipePasos.value = "";
+      recipeFecha.value = "";
+      recipeLink.value = "";
+      recipeVisible.checked = true;
+    }
+
+    async function cargarRecetasEnSegundoPlano() {
+      try {
+        const response = await fetch(API_BASE);
+        if (!response.ok) return;
+        recetas = await response.json();
+        renderCategorias();
+        aplicarFiltros();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function logoutAdmin() {
+      clearAdminToken();
+      limpiarFormularioReceta();
+      prepararEstadoAdmin();
+    }
+
+    searchToggle.addEventListener("click", toggleBuscador);
     searchClose.addEventListener("click", () => {
       if (searchInput.value.trim()) cerrarBuscador(true);
       else cerrarBuscador(false);
     });
-
     searchInput.addEventListener("input", aplicarFiltros);
+
+    menuToggle.addEventListener("click", abrirDrawer);
+    drawerClose.addEventListener("click", cerrarDrawer);
+    drawerOverlay.addEventListener("click", cerrarDrawer);
+
+    document.getElementById("menuHome").addEventListener("click", () => {
+      cerrarDrawer();
+      volverALista(false);
+    });
+
+    document.getElementById("menuAdmin").addEventListener("click", () => {
+      cerrarDrawer();
+      mostrarAdmin(true);
+    });
+
+    adminLoginButton.addEventListener("click", loginAdmin);
+    adminBackButton1.addEventListener("click", () => volverALista(false));
+    adminBackButton2.addEventListener("click", () => volverALista(false));
+    logoutAdminButton.addEventListener("click", logoutAdmin);
+    saveRecipeButton.addEventListener("click", guardarReceta);
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
