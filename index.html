@@ -362,9 +362,72 @@
       border-color: transparent;
     }
 
+    .featured-section {
+      margin-bottom: 18px;
+    }
+
+    .featured-header {
+      margin-bottom: 12px;
+    }
+
+    .featured-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 85%;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .featured-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .featured-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      background: var(--surface-strong);
+      box-shadow: var(--shadow-card);
+      scroll-snap-align: start;
+      cursor: pointer;
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .featured-card-body {
+      padding: 16px;
+    }
+
+    .featured-card-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .featured-card-description {
+      margin: 0 0 12px;
+      color: #4d433d;
+      font-size: 14px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .list-view {
       display: grid;
-      gap: 18px;
+      gap: 14px;
     }
 
     .card {
@@ -393,7 +456,7 @@
 
     .card img {
       width: 100%;
-      height: 210px;
+      height: 165px;
       object-fit: cover;
       transition: transform 500ms ease;
     }
@@ -417,22 +480,22 @@
     }
 
     .card-body {
-      padding: 14px 14px 16px;
+      padding: 12px 12px 14px;
     }
 
     .card-title {
-      margin: 0 0 8px;
-      font-size: 19px;
+      margin: 0 0 6px;
+      font-size: 17px;
       line-height: 1.1;
       font-weight: 800;
       letter-spacing: -0.03em;
     }
 
     .card-description {
-      margin: 0 0 14px;
+      margin: 0 0 10px;
       color: #4d433d;
-      font-size: 14px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.45;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -861,6 +924,10 @@
         grid-template-columns: 1fr 1fr;
       }
 
+      .featured-track {
+        grid-auto-columns: 48%;
+      }
+
       .form-row.two {
         grid-template-columns: 1fr 1fr;
       }
@@ -911,6 +978,17 @@
         </div>
 
         <div id="categoryChips" class="chips hidden"></div>
+
+        <section id="featuredSection" class="featured-section hidden">
+          <div class="section-header featured-header">
+            <div>
+              <h2 class="section-title">Destacadas para ti</h2>
+              <p class="section-meta">3 ideas aleatorias cada vez que entras</p>
+            </div>
+          </div>
+
+          <div id="featuredTrack" class="featured-track"></div>
+        </section>
 
         <div id="loading" class="state">Cargando recetas...</div>
         <div id="error" class="state hidden">No se pudieron cargar las recetas.</div>
@@ -1063,6 +1141,8 @@
     const categoryChips = document.getElementById("categoryChips");
     const listSection = document.getElementById("listSection");
     const sectionMeta = document.getElementById("sectionMeta");
+    const featuredSection = document.getElementById("featuredSection");
+    const featuredTrack = document.getElementById("featuredTrack");
 
     const adminLoginCard = document.getElementById("adminLoginCard");
     const adminFormCard = document.getElementById("adminFormCard");
@@ -1158,6 +1238,15 @@
       return texto.length > max ? texto.slice(0, max).trim() + "…" : texto;
     }
 
+    function mezclarArray(array) {
+      const copia = [...array];
+      for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+      }
+      return copia;
+    }
+
     function formatearFecha(fecha) {
       if (!fecha) return "";
       const date = new Date(fecha);
@@ -1237,18 +1326,58 @@
       sectionMeta.textContent = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
       const totalTexto = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
       sectionMeta.textContent = totalTexto;
+      renderDestacadas();
       renderLista();
     }
 
+    function renderDestacadas() {
+      featuredTrack.innerHTML = "";
+
+      if (!recetasFiltradas.length) {
+        featuredSection.classList.add("hidden");
+        return;
+      }
+
+      const destacadas = mezclarArray(recetasFiltradas).slice(0, 3);
+
+      destacadas.forEach(receta => {
+        const article = document.createElement("article");
+        article.className = "featured-card";
+
+        article.innerHTML = `
+          ${receta.imagen ? `<img src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+          ${receta.link ? `<span class="card-badge">🎬 Vídeo</span>` : ""}
+          ${receta.categoria ? `<div class="card-category">${escapeHtml(receta.categoria)}</div>` : ""}
+          <div class="featured-card-body">
+            <h3 class="featured-card-title">${escapeHtml(receta.nombre || "Sin nombre")}</h3>
+            <p class="featured-card-description">${escapeHtml(truncarTexto(receta.descripcion || "", 100))}</p>
+            <div class="card-footer">
+              ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
+              ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(formatearFecha(receta.fecha))}</span>` : ""}
+            </div>
+          </div>
+        `;
+
+        article.addEventListener("click", () => abrirReceta(receta, true));
+        featuredTrack.appendChild(article);
+      });
+
+      featuredSection.classList.remove("hidden");
+    }
+    
     function renderLista() {
       listView.innerHTML = "";
 
       if (!recetasFiltradas.length) {
+        featuredSection.classList.add("hidden");
         listView.innerHTML = `<div class="state">No hay recetas que coincidan con tu búsqueda.</div>`;
         return;
       }
+      
 
-      recetasFiltradas.forEach(receta => {
+      const recetasOrdenadas = mezclarArray(recetasFiltradas);
+
+      recetasOrdenadas.forEach(receta => {
         const article = document.createElement("article");
         article.className = "card";
 
