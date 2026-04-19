@@ -368,6 +368,7 @@
     }
 
     .card {
+      position: relative;
       overflow: hidden;
       border-radius: var(--radius-xl);
       background: var(--surface-strong);
@@ -445,6 +446,23 @@
       gap: 8px;
       margin-top: 16px;
       margin-bottom: 6px;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+
+      padding: 6px 10px;
+      border-radius: 999px;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+
+      backdrop-filter: blur(6px);
     }
 
     .pill {
@@ -1234,6 +1252,7 @@
         article.innerHTML = `
           <div class="card-image-wrap">
             ${receta.imagen ? `<img src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+            ${receta.link ? `<span class="card-badge">🎬 Vídeo</span>` : ""}
             ${receta.categoria ? `<div class="card-category">${escapeHtml(receta.categoria)}</div>` : ""}
           </div>
           <div class="card-body">
