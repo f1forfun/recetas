@@ -84,6 +84,901 @@
     .brand-row {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      object-fit: cover;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .search-toggle {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--ease), background var(--ease), box-shadow var(--ease);
+      flex-shrink: 0;
+    }
+
+    .search-toggle:active {
+      transform: scale(.96);
+    }
+
+    .search-toggle.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .search-panel {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition:
+        max-height 300ms cubic-bezier(.2,.8,.2,1),
+        opacity 220ms ease,
+        transform 220ms ease,
+        margin-top 220ms ease;
+      margin-top: 0;
+      pointer-events: none;
+    }
+
+    .search-panel.open {
+      max-height: 100px;
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 14px;
+      pointer-events: auto;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 14px 50px 14px 44px;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), var(--shadow-soft);
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+
+    .search-input:focus {
+      border-color: rgba(142,106,90,0.32);
+      box-shadow: 0 0 0 5px rgba(142,106,90,0.10), var(--shadow-soft);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .search-close {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 4px 14px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .section-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      padding: 2px 2px 8px;
+      scrollbar-width: none;
+    }
+
+    .chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--ease), background var(--ease), color var(--ease), border-color var(--ease);
+    }
+
+    .chip:active {
+      transform: scale(.98);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .list-view {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      background: var(--surface-strong);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transform: translateY(0);
+      transition: transform var(--ease), box-shadow var(--ease), opacity var(--ease);
+      animation: cardIn 420ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .card:active {
+      transform: scale(.992);
+    }
+
+    .card-image-wrap {
+      position: relative;
+      background: linear-gradient(180deg, #eadfd6, #e2d3c8);
+      overflow: hidden;
+    }
+
+    .card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      transform: scale(1.001);
+      transition: transform 500ms ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.03);
+    }
+
+    .card-category {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-body {
+      padding: 16px 16px 18px;
+    }
+
+    .card-title {
+      margin: 0 0 8px;
+      font-size: 21px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .card-description {
+      margin: 0 0 14px;
+      color: #4d433d;
+      font-size: 14px;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .state {
+      padding: 32px 18px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.55);
+      border-radius: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .detail-view {
+      animation: fadeSlideIn 320ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 11px 15px;
+      font-weight: 800;
+      box-shadow: var(--shadow-soft);
+      margin: 6px 0 16px;
+      cursor: pointer;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .detail-back:active {
+      transform: scale(.98);
+    }
+
+    .hero-card {
+      overflow: hidden;
+      border-radius: 30px;
+      background: var(--surface-strong);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      background: linear-gradient(180deg, #eadfd6, #e2d3c8);
+    }
+
+    .hero-content {
+      padding: 20px;
+    }
+
+    .hero-title {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-description {
+      margin: 0;
+      color: #4d433d;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .hero-pills {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-section {
+      background: rgba(255,255,255,0.94);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .detail-section h3 {
+      margin: 0 0 14px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .detail-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.75;
+      color: #403833;
+    }
+
+    .detail-list li + li {
+      margin-top: 6px;
+    }
+
+    .detail-empty {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (min-width: 720px) {
+      .list-view {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-row">
+          <div class="brand-left">
+            <img class="brand-icon" src="./icon-192.png" alt="Icono Recetas">
+            <div class="brand-copy">
+              <h1 class="brand-title">Recetas</h1>
+              <p class="brand-subtitle">Tu recetario familiar, bonito y a mano</p>
+            </div>
+          </div>
+
+          <button id="searchToggle" class="search-toggle" aria-label="Abrir búsqueda">
+            🔍
+          </button>
+        </div>
+
+        <div id="searchPanel" class="search-panel">
+          <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="text"
+              placeholder="Buscar por nombre, ingredientes o descripción"
+            >
+            <button id="searchClose" class="search-close" aria-label="Cerrar búsqueda">✕</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="listSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Todas las recetas</h2>
+            <p id="sectionMeta" class="section-meta">Cargando...</p>
+          </div>
+        </div>
+
+        <div id="categoryChips" class="chips hidden"></div>
+
+        <div id="loading" class="state">Cargando recetas...</div>
+        <div id="error" class="state hidden">No se pudieron cargar las recetas.</div>
+        <div id="listView" class="list-view hidden"></div>
+      </section>
+
+      <section id="detailView" class="detail-view hidden"></section>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = "https://dark-flower-6570.wordpressadri.workers.dev/";
+
+    let recetas = [];
+    let recetasFiltradas = [];
+    let categoriaActiva = "";
+    let recetaActualId = null;
+    let busquedaAbierta = false;
+
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const listView = document.getElementById("listView");
+    const detailView = document.getElementById("detailView");
+    const searchInput = document.getElementById("searchInput");
+    const searchPanel = document.getElementById("searchPanel");
+    const searchToggle = document.getElementById("searchToggle");
+    const searchClose = document.getElementById("searchClose");
+    const categoryChips = document.getElementById("categoryChips");
+    const listSection = document.getElementById("listSection");
+    const sectionMeta = document.getElementById("sectionMeta");
+
+    async function cargarRecetas() {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("No se pudieron cargar las recetas");
+
+        recetas = await response.json();
+        recetasFiltradas = [...recetas];
+
+        renderCategorias();
+        aplicarFiltros();
+
+        loadingEl.classList.add("hidden");
+        listView.classList.remove("hidden");
+
+        restaurarEstadoDesdeURL();
+      } catch (error) {
+        console.error(error);
+        loadingEl.classList.add("hidden");
+        errorEl.classList.remove("hidden");
+      }
+    }
+
+    function abrirBuscador() {
+      busquedaAbierta = true;
+      searchPanel.classList.add("open");
+      searchToggle.classList.add("active");
+      setTimeout(() => searchInput.focus(), 180);
+    }
+
+    function cerrarBuscador(limpiar = false) {
+      if (limpiar) {
+        searchInput.value = "";
+        aplicarFiltros();
+      }
+      busquedaAbierta = false;
+      searchPanel.classList.remove("open");
+      searchToggle.classList.remove("active");
+      searchInput.blur();
+    }
+
+    function toggleBuscador() {
+      if (busquedaAbierta) {
+        cerrarBuscador(false);
+      } else {
+        abrirBuscador();
+      }
+    }
+
+    function normalizarTexto(texto) {
+      return (texto || "").toLowerCase().trim();
+    }
+
+    function convertirTextoEnLista(texto) {
+      return (texto || "")
+        .split("\n")
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function truncarTexto(texto, max = 120) {
+      if (!texto) return "";
+      return texto.length > max ? texto.slice(0, max).trim() + "…" : texto;
+    }
+
+    function formatearFecha(fecha) {
+      if (!fecha) return "";
+      const date = new Date(fecha);
+      if (isNaN(date.getTime())) return fecha;
+      return date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    function escapeHtml(text) {
+      return (text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderCategorias() {
+      const categorias = [...new Set(recetas.map(r => r.categoria).filter(Boolean))];
+
+      if (!categorias.length) {
+        categoryChips.classList.add("hidden");
+        return;
+      }
+
+      categoryChips.innerHTML = "";
+
+      const chipTodas = crearChip("Todas", "");
+      categoryChips.appendChild(chipTodas);
+
+      categorias.forEach(categoria => {
+        categoryChips.appendChild(crearChip(categoria, categoria));
+      });
+
+      categoryChips.classList.remove("hidden");
+      actualizarChips();
+    }
+
+    function crearChip(texto, valor) {
+      const button = document.createElement("button");
+      button.className = "chip";
+      button.textContent = texto;
+      button.dataset.value = valor;
+      button.addEventListener("click", () => {
+        categoriaActiva = valor;
+        actualizarChips();
+        aplicarFiltros();
+      });
+      return button;
+    }
+
+    function actualizarChips() {
+      const chips = categoryChips.querySelectorAll(".chip");
+      chips.forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.value === categoriaActiva);
+      });
+    }
+
+    function aplicarFiltros() {
+      const texto = normalizarTexto(searchInput.value);
+
+      recetasFiltradas = recetas.filter(receta => {
+        const coincideTexto =
+          normalizarTexto(receta.nombre).includes(texto) ||
+          normalizarTexto(receta.descripcion).includes(texto) ||
+          normalizarTexto(receta.ingredientes).includes(texto);
+
+        const coincideCategoria =
+          !categoriaActiva || receta.categoria === categoriaActiva;
+
+        return coincideTexto && coincideCategoria;
+      });
+
+      sectionMeta.textContent = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
+      renderLista();
+    }
+
+    function renderLista() {
+      listView.innerHTML = "";
+
+      if (!recetasFiltradas.length) {
+        listView.innerHTML = `<div class="state">No hay recetas que coincidan con tu búsqueda.</div>`;
+        return;
+      }
+
+      recetasFiltradas.forEach(receta => {
+        const article = document.createElement("article");
+        article.className = "card";
+
+        article.innerHTML = `
+          <div class="card-image-wrap">
+            ${receta.imagen ? `<img src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+            ${receta.categoria ? `<div class="card-category">${escapeHtml(receta.categoria)}</div>` : ""}
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${escapeHtml(receta.nombre || "Sin nombre")}</h3>
+            <p class="card-description">${escapeHtml(truncarTexto(receta.descripcion || ""))}</p>
+            <div class="card-footer">
+              ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
+              ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(formatearFecha(receta.fecha))}</span>` : ""}
+            </div>
+          </div>
+        `;
+
+        article.addEventListener("click", () => abrirReceta(receta, true));
+        listView.appendChild(article);
+      });
+    }
+
+    function abrirReceta(receta, pushState = true) {
+      recetaActualId = receta.id;
+
+      const ingredientes = convertirTextoEnLista(receta.ingredientes);
+      const pasos = convertirTextoEnLista(receta.pasos);
+
+      detailView.innerHTML = `
+        <button class="detail-back" id="backButton">← Volver</button>
+
+        <article class="hero-card">
+          ${receta.imagen ? `<img class="hero-image" src="${receta.imagen}" alt="${escapeHtml(receta.nombre || "Receta")}">` : ""}
+          <div class="hero-content">
+            <h2 class="hero-title">${escapeHtml(receta.nombre || "Sin nombre")}</h2>
+            <p class="hero-description">${escapeHtml(receta.descripcion || "")}</p>
+            <div class="hero-pills">
+              ${receta.categoria ? `<span class="pill">🍴 ${escapeHtml(receta.categoria)}</span>` : ""}
+              ${receta.fecha ? `<span class="pill">📅 ${escapeHtml(formatearFecha(receta.fecha))}</span>` : ""}
+            </div>
+          </div>
+        </article>
+
+        <div class="detail-grid">
+          <section class="detail-section">
+            <h3>Ingredientes</h3>
+            ${
+              ingredientes.length
+                ? `<ul class="detail-list">${ingredientes.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+                : `<p class="detail-empty">No hay ingredientes.</p>`
+            }
+          </section>
+
+          <section class="detail-section">
+            <h3>Pasos</h3>
+            ${
+              pasos.length
+                ? `<ol class="detail-list">${pasos.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`
+                : `<p class="detail-empty">No hay pasos.</p>`
+            }
+          </section>
+        </div>
+      `;
+
+      document.getElementById("backButton").addEventListener("click", volverALista);
+
+      listSection.classList.add("hidden");
+      detailView.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (pushState) {
+        const url = new URL(window.location.href);
+        url.hash = `receta=${receta.id}`;
+        history.pushState({ view: "detail", recetaId: receta.id }, "", url);
+      }
+    }
+
+    function volverALista(fromPopState = false) {
+      recetaActualId = null;
+      detailView.classList.add("hidden");
+      listSection.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (!fromPopState) {
+        const url = new URL(window.location.href);
+        url.hash = "";
+        history.pushState({ view: "list" }, "", url.pathname + url.search);
+      }
+    }
+
+    function restaurarEstadoDesdeURL() {
+      const hash = window.location.hash || "";
+      if (!hash.startsWith("#receta=")) {
+        history.replaceState({ view: "list" }, "", window.location.href);
+        return;
+      }
+
+      const recetaId = hash.replace("#receta=", "");
+      const receta = recetas.find(r => r.id === recetaId);
+
+      if (receta) {
+        history.replaceState({ view: "detail", recetaId }, "", window.location.href);
+        abrirReceta(receta, false);
+      } else {
+        history.replaceState({ view: "list" }, "", window.location.pathname + window.location.search);
+      }
+    }
+
+    window.addEventListener("popstate", (event) => {
+      const state = event.state;
+
+      if (!state || state.view === "list") {
+        volverALista(true);
+        return;
+      }
+
+      if (state.view === "detail" && state.recetaId) {
+        const receta = recetas.find(r => r.id === state.recetaId);
+        if (receta) abrirReceta(receta, false);
+      }
+    });
+
+    searchToggle.addEventListener("click", toggleBuscador);
+
+    searchClose.addEventListener("click", () => {
+      if (searchInput.value.trim()) {
+        cerrarBuscador(true);
+      } else {
+        cerrarBuscador(false);
+      }
+    });
+
+    searchInput.addEventListener("input", aplicarFiltros);
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then((registration) => {
+            console.log("SW registrado", registration.scope);
+          })
+          .catch((err) => {
+            console.log("Error SW", err);
+          });
+      });
+    }
+
+    cargarRecetas();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recetas</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="theme-color" content="#8E6A5A">
+
+  <style>
+    :root {
+      --bg: #f5f1ec;
+      --bg-soft: #fbf8f5;
+      --surface: rgba(255,255,255,0.86);
+      --surface-strong: #ffffff;
+      --text: #201b18;
+      --muted: #746960;
+      --accent: #8e6a5a;
+      --accent-2: #b78663;
+      --accent-soft: #efe3da;
+      --border: rgba(68, 47, 35, 0.08);
+      --shadow-soft: 0 10px 30px rgba(48, 32, 24, 0.08);
+      --shadow-card: 0 18px 45px rgba(48, 32, 24, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max-width: 820px;
+      --ease: 240ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at top, #fcfaf8 0%, var(--bg) 40%, #efe7e0 100%);
+      min-height: 100vh;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app-shell {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding-bottom: 32px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 14px 12px;
+      background: linear-gradient(to bottom, rgba(245,241,236,0.94), rgba(245,241,236,0.82));
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      border: 1px solid rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.58);
+      box-shadow: var(--shadow-soft);
+      border-radius: 30px;
+      padding: 16px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
       gap: 12px;
       margin-bottom: 14px;
     }
