@@ -1042,7 +1042,6 @@
     const categoryChips = document.getElementById("categoryChips");
     const listSection = document.getElementById("listSection");
     const sectionMeta = document.getElementById("sectionMeta");
-    const introCount = document.getElementById("introCount");
 
     const adminLoginCard = document.getElementById("adminLoginCard");
     const adminFormCard = document.getElementById("adminFormCard");
@@ -1217,7 +1216,6 @@
       sectionMeta.textContent = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
       const totalTexto = `${recetasFiltradas.length} receta${recetasFiltradas.length === 1 ? "" : "s"}`;
       sectionMeta.textContent = totalTexto;
-      introCount.textContent = totalTexto + " disponibles";
       renderLista();
     }
 
