@@ -473,8 +473,28 @@
     }
 
     .video-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
       margin-top: 14px;
-      border: 1px solid rgba(142,106,90,0.22);
+
+      padding: 14px 16px;
+      border-radius: 18px;
+
+      background: linear-gradient(
+        135deg,
+        rgba(142,106,90,0.18),
+        rgba(183,135,102,0.18)
+      );
+      color: var(--accent);
+
+      font-weight: 700;
+      text-decoration: none;
+
+      border: 1px solid rgba(142,106,90,0.25);
+
+      transition: all var(--ease);
     }
     .primary-button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -499,7 +519,10 @@
       background: rgba(177,79,69,0.18);
     }
 
-    .video-button:active,
+    .video-button:active {
+      transform: scale(.98);
+      background: rgba(142,106,90,0.22);
+    }
     .primary-button:active,
     .secondary-button:active {
       transform: scale(.98);
